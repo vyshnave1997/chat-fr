@@ -128,9 +128,9 @@ body, html, #root {
   .button {
     background-color: #29a1e7;
     color: white;
-    border: none;
+    border: 0.7px solid #29a1e9;
     border-radius: 15px;
-    width: 40px;
+    width: 55px;
     height: 40px;
     display: flex;
     justify-content: center;
