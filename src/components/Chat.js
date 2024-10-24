@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
-import EmojiPicker from 'emoji-picker-react';
 import './Chat.css'; // Import the updated WhatsApp-style CSS
 
-const socket = io('https://ch-ser-production.up.railway.app/'); // Connect to the server
+const socket = io('http://localhost:5000'); // Connect to the server
 
 const Chat = () => {
   const [username, setUsername] = useState('');
@@ -11,11 +10,14 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState([]);
   const [isUsernameSet, setIsUsernameSet] = useState(false);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   useEffect(() => {
     socket.on('chatMessage', (data) => {
       setMessages((prevMessages) => [...prevMessages, data]);
+    });
+
+    socket.on('previousMessages', (previousMessages) => {
+      setMessages(previousMessages);
     });
 
     socket.on('userList', (userList) => {
@@ -24,6 +26,7 @@ const Chat = () => {
 
     return () => {
       socket.off('chatMessage');
+      socket.off('previousMessages');
       socket.off('userList');
     };
   }, []);
@@ -46,8 +49,8 @@ const Chat = () => {
     }
   };
 
-  const onEmojiClick = (event, emojiObject) => {
-    setMessage(message + emojiObject.emoji);
+  const handleRefresh = () => {
+    socket.emit('refreshMessages'); // Emit event to refresh messages from database
   };
 
   useEffect(() => {
@@ -74,6 +77,7 @@ const Chat = () => {
         <div className="chat-box">
           <div className="chat-header">
             <h1>Chat Room</h1>
+            <button onClick={handleRefresh} className="refresh-button">🔄 Refresh</button>
           </div>
 
           <div className="active-users">
@@ -102,11 +106,8 @@ const Chat = () => {
               placeholder="Type a message"
               className="input"
             />
-            <button type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)} className="emoji-button">😊</button>
             <button type="submit" className="button">▶</button>
           </form>
-
-          {showEmojiPicker && <EmojiPicker onEmojiClick={onEmojiClick} className="emoji-picker" />}
         </div>
       )}
     </div>
