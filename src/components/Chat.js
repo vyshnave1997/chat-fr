@@ -106,7 +106,7 @@ const Chat = () => {
               placeholder="Type a message"
               className="input"
             />
-            <button type="submit" className="button">▶</button>
+            <button type="submit" className="button">Send</button>
           </form>
         </div>
       )}
