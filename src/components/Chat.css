@@ -83,6 +83,8 @@ body, html, #root {
     background-color: #ffffff;
     padding: 10px;
     border-bottom: 1px solid #ddd;
+      line-spacing:1px;
+      text-transform: capitalize;
   }
   
   .active-users h2 {
