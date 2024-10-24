@@ -67,6 +67,7 @@ body, html, #root {
     display: block;
     text-align: right;
       margin-right: 5px;
+      margin-left:5px;
   }
   
   .chat-header {
