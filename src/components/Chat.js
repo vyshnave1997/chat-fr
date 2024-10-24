@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import EmojiPicker from 'emoji-picker-react';
 import './Chat.css'; // Import the updated WhatsApp-style CSS
 
-const socket = io('http://localhost:5000'); // Connect to the server
+const socket = io('https://ch-ser-production.up.railway.app/'); // Connect to the server
 
 const Chat = () => {
   const [username, setUsername] = useState('');
