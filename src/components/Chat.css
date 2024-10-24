@@ -86,10 +86,12 @@ body, html, #root {
      
   }
   
-  .active-users h2 {
+   .active-users h2 {
     margin: 0;
     font-size: 1rem;
     color: #29a1e7;
+    text-transform: capitalize;
+    letter-spacing: 1px;
   }
   
   .active-users ul {
