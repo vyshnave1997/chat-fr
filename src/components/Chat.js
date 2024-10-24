@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import './Chat.css'; // Import the updated WhatsApp-style CSS
 
-const socket = io('http://localhost:5000'); // Connect to the server
+const socket = io('https://ch-ser-production.up.railway.app'); // Connect to the server
 
 const Chat = () => {
   const [username, setUsername] = useState('');
