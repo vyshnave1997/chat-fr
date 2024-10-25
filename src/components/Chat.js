@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import './Chat.css';
 
-const socket = io('http://localhost:5000');
+const socket = io('https://chat-server-production-d66e.up.railway.app');
 
 const Chat = () => {
   const [username, setUsername] = useState('');
