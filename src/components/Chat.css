@@ -156,7 +156,7 @@ form {
 }
 
 .typing-indicator {
-  padding: 3px;
+  padding: 8px;
   text-transform: capitalize;
   background-color: transparent;
   color:#9a9795;
