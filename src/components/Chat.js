@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
-import './Chat.css'; // Import the updated WhatsApp-style CSS
+import './Chat.css';
 
-const socket = io('https://chat-server-production-d66e.up.railway.app'); // Connect to the server
+const socket = io('http://localhost:5000');
 
 const Chat = () => {
   const [username, setUsername] = useState('');
@@ -10,6 +10,7 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState([]);
   const [isUsernameSet, setIsUsernameSet] = useState(false);
+  const [typingStatus, setTypingStatus] = useState('');
 
   useEffect(() => {
     socket.on('chatMessage', (data) => {
@@ -24,10 +25,15 @@ const Chat = () => {
       setUsers(userList);
     });
 
+    socket.on('typing', ({ username, isTyping }) => {
+      setTypingStatus(isTyping ? `${username} is typing...` : '');
+    });
+
     return () => {
       socket.off('chatMessage');
       socket.off('previousMessages');
       socket.off('userList');
+      socket.off('typing');
     };
   }, []);
 
@@ -46,11 +52,18 @@ const Chat = () => {
       const data = { username, message, time };
       socket.emit('chatMessage', data);
       setMessage('');
+      socket.emit('typing', false); // Stop typing when message is sent
     }
   };
 
+  // Emit typing status when typing
+  const handleTyping = (e) => {
+    setMessage(e.target.value);
+    socket.emit('typing', e.target.value.length > 0);
+  };
+
   const handleRefresh = () => {
-    socket.emit('refreshMessages'); // Emit event to refresh messages from database
+    socket.emit('refreshMessages');
   };
 
   useEffect(() => {
@@ -76,7 +89,7 @@ const Chat = () => {
       ) : (
         <div className="chat-box">
           <div className="chat-header">
-            <h1>Lets Talk !</h1>
+            <h1>Chat Room</h1>
             <button onClick={handleRefresh} className="refresh-button">🔄 Refresh</button>
           </div>
 
@@ -91,18 +104,26 @@ const Chat = () => {
 
           <div className="message-box">
             {messages.map((msg, index) => (
-              <div key={index} className={`message ${msg.username === username ? 'self' : 'other'}`}>
+              <div
+                key={index}
+                className={
+                  msg.type === 'status' ? 'joinmessage' :
+                  msg.username === username ? 'message self' : 'message other'
+                }
+              >
                 <span>{msg.message}</span>
-                <span className="time">{msg.time}</span>
+                {msg.type !== 'status' && <span className="time">{msg.time}</span>}
               </div>
             ))}
           </div>
+
+          {typingStatus && <p className="typing-indicator">{typingStatus}</p>}
 
           <form onSubmit={sendMessage} className="message-form">
             <input
               type="text"
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={handleTyping}
               placeholder="Type a message"
               className="input"
             />
