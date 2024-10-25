@@ -147,6 +147,7 @@ form {
   border-radius: 15px;
   width: 55px;
   height: 40px;
+  margin-right:10px;
   display: flex;
   justify-content: center;
   align-items: center;
