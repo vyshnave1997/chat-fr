@@ -89,7 +89,7 @@ const Chat = () => {
       ) : (
         <div className="chat-box">
           <div className="chat-header">
-            <h1>Chat Room</h1>
+            <h1>Lets talk !</h1>
             <button onClick={handleRefresh} className="refresh-button">🔄 Refresh</button>
           </div>
 
